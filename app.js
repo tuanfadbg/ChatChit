@@ -1,43 +1,39 @@
 var express = require("express");
-	// test router
-	// var router = express.Router();
 var app = express();
-app.use(express.static("public"));
+app.use(express.static("./public"));
 app.set("view engine","ejs");
 app.set("views","./views");
-
 var server = require("http").Server(app);
-server.listen(3001);
-// var things = require('./things.js');
-// app.use('/things',things);
-// app.listen(8080);
+var io = require("socket.io")(server);
+server.listen(3000);
 
-app.get("/", function(req, res){
-	let data = [
-		{
-			user: 'tuan'
-		},
-		{
-			user: 'tuan'
-		},
-		{
-			user: 'tuan'
-		},
-		{
-			user: 'tuan'
-		},
-		{
-			user: 'tuan'
-		},
-		{
-			user: 'tuan'
-		}
-	];
-	app.locals.data=data;
-	res.render('trangchu',);
-	//res.render("footer");
+var mangUser = [];
 
+
+
+
+io.on("connection",function(socket){
+    
+    console.log("Connected with socket id: "+ socket.id);
+    
+    socket.on("Client_send_message",function(data){
+        console.log("tin nhan da duoc gui len" + data);
+        socket.to(room_name).emit("Message_sent",data);
+    });
+
+    var room_name = socket.request.headers.referer; // link of page, where user connected to socket
+    
+     //connecting to room
+    socket.on("Joinroom",function(data){
+        socket.join(data);
+        console.log(data);
+        room_name = data;
+    });
+     
+ });
+   
+
+
+app.get("/",function(req,res){
+    res.render("trangchu")
 });
-// app.get("/things", function(req, res){
-// 	res.render('login');
-// });
