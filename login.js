@@ -9,7 +9,7 @@ $("#second").fadeOut("fast", function() {
 $("#first").fadeIn("fast");
 });
 });
-/*
+
 
   
          $(function() {
@@ -41,7 +41,7 @@ $("#first").fadeIn("fast");
          });
          
 
-
+/*
 $(function() {
   
   $("form[name='registration']").validate({
@@ -72,5 +72,26 @@ $(function() {
       form.submit();
     }
   });
+});
+*/
+/*
+$(function(){
+  $("form[name='login']").validate(
+    rules:{
+      password: {
+        required : true,
+        minlength: 5
+      }
+    },
+    messages:{
+      password:{
+        required: "please Enter Your password",
+        minlength: "Your password must be at least 5 characters long"
+      }
+    },
+    submitHandler: function(form){
+      form.submit();
+    }
+    );
 });
 */
