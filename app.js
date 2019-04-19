@@ -1,5 +1,6 @@
 var express = require("express");
 var app = express();
+var path = require('path');
 var mysql = require('mysql');
 app.use(express.static("./public"));
 app.set("view engine","ejs");
@@ -13,12 +14,11 @@ app.use(bodyParser.json());
 server.listen(3001);
 
 var con = mysql.createConnection({
-	host: "localhost",
-	user:"root",
+  host: "localhost",
+  user:"root",
 	password:"",
 	database: "chatchit"
 });
-
 
 
 
@@ -44,7 +44,7 @@ io.on("connection",function(socket){
    
 
 app.get("/",function(req,res){
-    // res.render("trangchu")
+    //res.render("trangchu")
     res.render("login")
 });
 
@@ -63,18 +63,20 @@ app.post('/registry',function(req,res){
 //   res.write('You sent the userName "' + req.body.userName+'".\n');
 //   res.write('You sent the password "' + req.body.password+'".\n');
 
-  con.connect(function(err) {
-  if (err) throw err;
+  
+  con.connect(function(err){
+  if(err) throw err;
   var sql = "INSERT INTO user (fullname,phone,username,pass) VALUES ('"+fullName+"','"+phoneNum+"','"+userName+"', '"+password+"')";
   con.query(sql, function (err) {
     if (err) throw function() {
         res.render("login");
     };
     
-    res.render("trangchu");
-    //res.end();
+    //res.render("trangchu");
+    res.end();
   });
-  });
+});
+
 });
 //Login
 app.use(session({
@@ -87,19 +89,26 @@ app.post('/signin', function(request, response) {
 	var username = request.body.userName;
 	var password = request.body.password;
 	if (username && password) {
-		con.query('SELECT * FROM user WHERE userName = ? AND password = ?', [username, password], function(error, results, fields) {
-			if (results.length > 0) {
+    con.connect(function(err){
+    if(err) throw err;
+    console.log("Done!");
+		con.query('SELECT * FROM user WHERE username ="'+username+'" AND pass ="'+password+'"', function(error, results, fields) {
+      console.log(results);
+      if (results.length>0) {
 				request.session.loggedin = true;
 				request.session.username = username;
 				response.write('Signed In!!!!!' + '\n welcome back ' + username);
 			} else {
 				response.send('Incorrect Username and/or Password!');
 			}			
-			response.end();
-		});
+      response.end();
+      
+    });
+  });
 	} else {
 		response.send('Please enter Username and Password!');
 		response.end();
-	}
+  }
+  //res.render("trangchu");
 });
 

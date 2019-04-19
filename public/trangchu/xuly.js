@@ -1,14 +1,17 @@
-var socket = io("http://localhost:3000");
+var socket = io("http://localhost:3001");
+
+var senter = "Tung";
+var receiver = "Tuan"
+var date = "";
+var content = "hdhdhdhs";
 var room_name = "room";
-    
 
-
+    // nhan tin nhan
     socket.on("Message_sent",function(data){
       var message = data;
       $(".msg_history").append("<div class='outgoing_msg1'><div class='sent_msg1'>"+"<p>"+message+"</p> "+"    </div></div>");
-      
-      
-    });
+      content = data;
+      });
 
 
   
