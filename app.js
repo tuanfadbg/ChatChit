@@ -20,6 +20,9 @@ var con = mysql.createConnection({
 	database: "chatchit"
 });
 
+var user;
+
+var groupChats;
 
 
 io.on("connection",function(socket){
@@ -89,21 +92,70 @@ app.post('/signin', function(request, response) {
 	var username = request.body.userName;
 	var password = request.body.password;
 	if (username && password) {
-    con.connect(function(err){
-    if(err) throw err;
-    console.log("Done!");
 		con.query('SELECT * FROM user WHERE username ="'+username+'" AND pass ="'+password+'"', function(error, results, fields) {
-      console.log(results);
+      
       if (results.length>0) {
 				request.session.loggedin = true;
-				request.session.username = username;
-				response.write('Signed In!!!!!' + '\n welcome back ' + username);
+        user = results[0];
+        
+        // console.log(user);
+
+        var stringQuery = 'SELECT * FROM `member_group` JOIN group_info ' + 
+        'ON member_group.groupID = group_info.groupID WHERE userID =' + user.userID+ ' OR recceiver_id =' + user.userID;
+
+        // console.log(stringQuery);
+        con.query(stringQuery, function(error, results, fields) {
+          console.log("1");
+          
+      
+          groupChats = results;
+          
+          console.log(groupChats);
+          // xu ly chat 2 nguoi
+          // let userIdQuery = [] ;
+        
+          // for (let i = 0; i< groupChats.length; i++) {
+          //   if (groupChats[i].group_name == null || groupChats[i].group_name == '') {
+
+          //     if(groupChats[i].userID == user.userID)
+
+          //     userIdQuery.push(groupChats[i].recceiver_id);
+          //     else {
+          //       userIdQuery.push(groupChats[i].userID);
+          //     }
+          //   }
+          // }
+
+          //stringQuery = 'SELECT * FROM `user` where userID in ' + convertArrayToString(userIdQuery);
+
+        // console.log(stringQuery);
+        // con.query(stringQuery, function(error, results, fields) {
+        //   // console.log(results);
+        //   for (let i = 0; i< groupChats.length; i++) {
+        //     if (groupChats[i].group_name == null || groupChats[i].group_name == '') {
+        //       if(groupChats[i].userID == user.userID) {
+        //         for (let j = 0;j< results.length; j++) {
+        //           if (groupChats[i].recceiver_id == results[j].userID) {
+        //             groupChats[i].group_name = results[j].fullname;
+        //             // results.pop(j);
+        //             // j--;
+        //           }
+        //         }
+        //       }
+        //     }
+        //   }
+        // });
+
+        //console.log(groupChats);
+        });
+        console.log(groupChats);
+				response.render("trangchu");
 			} else {
 				response.send('Incorrect Username and/or Password!');
 			}			
       response.end();
       
-    });
+    // });
   });
 	} else {
 		response.send('Please enter Username and Password!');
@@ -111,4 +163,16 @@ app.post('/signin', function(request, response) {
   }
   //res.render("trangchu");
 });
+
+function convertArrayToString(arr) {
+  let result = "(";
+  for (let i = 0; i < arr.length; i++) {
+    if (i == arr.length - 1)
+    result += arr[i];
+    else
+    result += arr[i] + ",";
+  }
+  result += ")";
+return result;
+}
 
