@@ -14,74 +14,77 @@
 				<div class="myform form ">
 					 <div class="logo mb-3">
 						 <div class="col-md-12 text-center">
-							<h1>Hóa đơn</h1>
+							<h1>Login</h1>
 						 </div>
 					</div>
-                   <form action="/bill" method="post" name="bill">
+                   <form action="/signin" method="post" name="login">
                            <div class="form-group">
-                              <label>Tên khách hàng</label>
-                              <input type="text" name="cusName"  class="form-control"  placeholder="Ví dụ: Nguyễn Văn A">
+                              <label for="exampleInputEmail1">User Name</label>
+                              <input type="text" name="userName  "class="form-control" id="userName" aria-describedby="emailHelp" placeholder="Enter User Name">
                            </div>
                            <div class="form-group">
-                              <label>Tên hàng</label>
-                              <input type="text" name="pdtName"  class="form-control" placeholder="Ví dụ: Váy zen">
+                              <label for="exampleInputEmail1">Password</label>
+                              <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
                            </div>
                            <div class="form-group">
-                              <label>Số lượng</label>
-                              <input type="text" name="quantity"  class="form-control" placeholder="Ví dụ: 10">
-                           </div>
-                           <div class="form-group">
-                              <label>Đơn giá</label>
-                              <input type="text" name="price"  class="form-control"  placeholder="Ví dụ: 20000">
+                              <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
                            </div>
                            <div class="col-md-12 text-center ">
-                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm" id="loginbtn" >Lưu</button>
-                           </div>
-                            <div class="form-group">
-                              <hr>
-                              <p class="text-center">Kiểm tra thông tin đã lưu <a href="#" id="signup">tại đây</a></p>
+                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm" id="loginbtn" >Login</button>
                            </div>
                            <div class="col-md-12 ">
+                              <div class="login-or">
+                                 <hr class="hr-or">
+                                 <span class="span-or">or</span>
+                              </div>
+                           </div>
+                           <div class="form-group">
+                              <p class="text-center">Don't have account? <a href="#" id="signup">Sign up here</a></p>
                            </div>
                         </form>     
 				</div>
 			</div>
-         <div id="second">
-               <div class="myform form ">
+			  <div id="second">
+			      <div class="myform form ">
                         <div class="logo mb-3">
                            <div class="col-md-12 text-center">
-                              <h1 >Tra thông tin </h1>
+                              <h1 >Registry</h1>
                            </div>
                         </div>
-                        <form action="/search" method="get" name="search">
+                        <div id="notification"></div>
+                        <form action="/registry" method="post" name="registration" id="formRegistry">
                            <div class="form-group">
-                              <label for="exampleInputEmail1">Tên khách hàng</label>
-                              <input type="text"  name="cusName" class="form-control" placeholder="Ví dụ: Nguyễn Văn A">
+                              <label for="exampleInputEmail1">Full Name</label>
+                              <input type="text"  name="fullName" class="form-control" id="fullNameR" aria-describedby="emailHelp" placeholder="Enter Last Name">
                            </div>
                            <div class="form-group">
-                              <label for="exampleInputEmail1">Tên hàng</label>
-                              <input type="text"  name="pdtName" class="form-control" placeholder="Ví dụ: Váy zen">
+                              <label for="exampleInputEmail1">User Name</label>
+                              <input type="text"  name="userName" class="form-control" id="userNameR" aria-describedby="emailHelp" placeholder="Enter User Name">
                            </div>
                            <div class="form-group">
-                              <label for="exampleInputEmail1">Số lượng</label>
-                              <input type="phoneNumber" name="quantity"  class="form-control" placeholder="Ví dụ: 10">
+                              <label for="exampleInputEmail1">Phone Number</label>
+                              <input type="phoneNumber" name="phoneNumber"  class="form-control" id="phoneNumR" aria-describedby="emailHelp" placeholder="Enter Phone Number">
                            </div>
                            <div class="form-group">
-                              <label for="exampleInputEmail1">Đơn giá</label>
-                              <input type="password" name="price"  class="form-control" placeholder="Ví dụ: 20000">
+                              <label for="exampleInputEmail1">Password</label>
+                              <input type="password" name="password" id="passwordR"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Password Confirm</label>
+                              <input type="password" name="passwordCf" id="passwordCfR"  class="form-control" aria-describedby="emailHelp" placeholder="Re-type Your Password">
                            </div>
                            <div class="col-md-12 text-center mb-3">
-                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Tìm kiếm</button>
+                              <button id="registry" class=" btn btn-block mybtn btn-primary tx-tfm">Get Started For Free</button>
                            </div>
                            <div class="col-md-12 ">
                               <div class="form-group">
-                                 <p class="text-center"><a href="#" id="signin">Quay lại</a></p>
+                                 <p class="text-center"><a href="#" id="signin">Already have an account?</a></p>
                               </div>
                            </div>
                             </div>
                         </form>
                      </div>
-         </div>
+			</div>
 		</div>
       </div> 
       <script type="text/javascript" src="js/login.js"></script>
