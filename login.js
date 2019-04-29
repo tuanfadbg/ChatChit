@@ -1,3 +1,35 @@
+$("#registry").click(function() {
+// $.post('/registry', {category: $('userNameR, type:'premium'}, function(response){ 
+//       alert("success");
+//       $("#mypar").html(response.amount);
+// });
+
+$("#formRegistry").submit(function(e) {
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+    var form = $(this);
+    var url = form.attr('action');
+
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: form.serialize(), // serializes the form's elements.
+           success: function(data)
+           {
+            if (data == "") {
+              window.location.replace("http://www.w3schools.com");
+              return;
+            }
+            $("#notification").append("<div class=\"alert alert-danger\"><strong>Danger!</strong> " + data + "</div>");
+               
+           }
+         });
+
+
+});
+});
+
 $("#signup").click(function() {
 $("#first").fadeOut("fast", function() {
 $("#second").fadeIn("fast");
