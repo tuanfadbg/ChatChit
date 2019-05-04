@@ -12,11 +12,59 @@ var con = mysql.createConnection({
 	password:"",
 	database: "login"
 });
+// <<<<<<< Tung
+/*
+con.connect(function(err){
+	if(err) throw err;
+	console.log('connected');
+	var sql ="insert into user (userName,password) values ('tshady','overwatch')";
+	con.query(sql,function(err,result){
+		if(err) throw err;
+		console.log('1 record inserted');
+	});
+});
+*/
+// =======
 
+// >>>>>>> master
 app.use('/css',express.static('/home/tshady/CEProject/css'));
 app.use('/js',express.static('/home/tshady/CEProject/js'));
 
 app.get('/',function(req,res){
+// <<<<<<< Tung
+	res.sendFile(path.join('/home/tshady/CEProject/login.html'));
+});
+//Registration
+app.post('/registry',function(req,res){
+  var fullName=req.body.fullName;
+  var phoneNum=req.body.phoneNumber;
+  var userName=req.body.userName;
+  var password=req.body.password;
+
+  res.write('Registration successed!.\n');
+  res.write('You sent the fullName "' + req.body.fullName+'".\n');
+  res.write('You sent the phoneNumber"' + req.body.phoneNumber+'".\n');
+  res.write('You sent the userName "' + req.body.userName+'".\n');
+  res.write('You sent the password "' + req.body.password+'".\n');
+
+  con.connect(function(err) {
+  if (err) throw err;
+  var sql = "INSERT INTO user (fullName,phoneNum,userName,password) VALUES ('"+fullName+"','"+phoneNum+"','"+userName+"', '"+password+"')";
+  con.query(sql, function (err) {
+    if (err) throw err;
+    console.log("1 record inserted");
+     res.end();
+  });
+  });
+});
+//Login
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+
+// =======
 	if (session.login == true) {
 res.sendFile(path.join('/home/tshady/MyProject/login.html'));
 	} else {
@@ -52,6 +100,7 @@ app.post('/registry',function(req,res){
 });
 
 /*
+// >>>>>>> master
 app.post('/signin', function(request, response) {
 	var username = request.body.userName;
 	var password = request.body.password;
@@ -60,7 +109,11 @@ app.post('/signin', function(request, response) {
 			if (results.length > 0) {
 				request.session.loggedin = true;
 				request.session.username = username;
+// <<<<<<< Tung
+				response.write('Signed In!!!!!' + '\n welcome back ' + username);
+// =======
 				response.write('Signed In!!!!!' + '\n welcome back ' + username + results.length);
+// >>>>>>> master
 			} else {
 				response.send('Incorrect Username and/or Password!');
 			}			
@@ -71,6 +124,10 @@ app.post('/signin', function(request, response) {
 		response.end();
 	}
 });
+// <<<<<<< Tung
+
+
+// =======
 */
 app.post('/signin',function(request,response){
 	var username=request.body.userName;
@@ -85,4 +142,5 @@ app.post('/signin',function(request,response){
 		console.log("Wrong username");
 	});
 });
+// >>>>>>> master
 app.listen(3000);
