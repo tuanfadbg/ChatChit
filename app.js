@@ -21,14 +21,15 @@ var con = mysql.createConnection({
 });
 
 var user;
-
 var groupChats;
+var socketid;
+
 
 
 io.on("connection",function(socket){
     
     console.log("Connected with socket id: "+ socket.id);
-    
+    socketid = socket.id;
     socket.on("Client_send_message",function(data){
         console.log("tin nhan da duoc gui len" + data);
         socket.to(room_name).emit("Message_sent",data);
@@ -42,10 +43,11 @@ io.on("connection",function(socket){
         console.log(data);
         room_name = data;
     });
+    socket.emit("groups_info",groupChats,user);
      
  });
    
-
+  
 app.get("/",function(req,res){
     //res.render("trangchu")
     res.render("login")
@@ -92,79 +94,98 @@ app.post('/signin', function(request, response) {
 	var username = request.body.userName;
 	var password = request.body.password;
 	if (username && password) {
+    
 		con.query('SELECT * FROM user WHERE username ="'+username+'" AND pass ="'+password+'"', function(error, results, fields) {
       
       if (results.length>0) {
 				request.session.loggedin = true;
         user = results[0];
         
-        // console.log(user);
+        console.log(user);
 
         var stringQuery = 'SELECT * FROM `member_group` JOIN group_info ' + 
         'ON member_group.groupID = group_info.groupID WHERE userID =' + user.userID+ ' OR recceiver_id =' + user.userID;
 
         // console.log(stringQuery);
-        con.query(stringQuery, function(error, results, fields) {
-          console.log("1");
+        con.query(stringQuery, function(error, result, fields) {
+          
           
       
-          groupChats = results;
+          groupChats = result;
           
           console.log(groupChats);
           // xu ly chat 2 nguoi
-          // let userIdQuery = [] ;
+          let userIdQuery = [] ;
         
-          // for (let i = 0; i< groupChats.length; i++) {
-          //   if (groupChats[i].group_name == null || groupChats[i].group_name == '') {
+          for (let i = 0; i< groupChats.length; i++) {
+            if (groupChats[i].group_name == null || groupChats[i].group_name == '') {
 
-          //     if(groupChats[i].userID == user.userID)
+              if(groupChats[i].userID == user.userID)
 
-          //     userIdQuery.push(groupChats[i].recceiver_id);
-          //     else {
-          //       userIdQuery.push(groupChats[i].userID);
-          //     }
-          //   }
-          // }
+              userIdQuery.push(groupChats[i].recceiver_id);
+              else {
+                userIdQuery.push(groupChats[i].userID);
+              }
+            }
+          }
+          
+          if (userIdQuery.length > 0) {
 
-          //stringQuery = 'SELECT * FROM `user` where userID in ' + convertArrayToString(userIdQuery);
-
-        // console.log(stringQuery);
-        // con.query(stringQuery, function(error, results, fields) {
-        //   // console.log(results);
-        //   for (let i = 0; i< groupChats.length; i++) {
-        //     if (groupChats[i].group_name == null || groupChats[i].group_name == '') {
-        //       if(groupChats[i].userID == user.userID) {
-        //         for (let j = 0;j< results.length; j++) {
-        //           if (groupChats[i].recceiver_id == results[j].userID) {
-        //             groupChats[i].group_name = results[j].fullname;
-        //             // results.pop(j);
-        //             // j--;
-        //           }
-        //         }
-        //       }
-        //     }
-        //   }
-        // });
+        
+            stringQuery = 'SELECT * FROM `user` where userID in ' + convertArrayToString(userIdQuery);
+          
+        
+            con.query(stringQuery, function(error, results, fields) {
+          // console.log(results);
+           for (let i = 0; i< groupChats.length; i++) {
+             if (groupChats[i].group_name == null || groupChats[i].group_name == '') {
+               if(groupChats[i].userID == user.userID) {
+                 for (let j = 0;j< results.length; j++) {
+                   if (groupChats[i].recceiver_id == results[j].userID) {
+                     groupChats[i].group_name = results[j].fullname;
+                     // results.pop(j);
+                     // j--;
+                   }
+                 }
+               }
+             }
+           }
+           console.log(groupChats);
+           response.render("trangchu");
+           response.end();
+         });
+          } else {
+              console.log(groupChats);
+              response.render("trangchu");
+              response.end();
+            }
 
         //console.log(groupChats);
-        });
-        console.log(groupChats);
-				response.render("trangchu");
+         });
+      
+       
+        
+       
 			} else {
 				response.send('Incorrect Username and/or Password!');
-			}			
-      response.end();
+      }	
+      		
+      
       
     // });
-  });
+    });
+
+  
+    //console.log(groupChats);
 	} else {
-		response.send('Please enter Username and Password!');
-		response.end();
-  }
+		  response.send('Please enter Username and Password!');
+		  response.end();
+    }
   //res.render("trangchu");
 });
 
 function convertArrayToString(arr) {
+  
   let result = "(";
   for (let i = 0; i < arr.length; i++) {
     if (i == arr.length - 1)

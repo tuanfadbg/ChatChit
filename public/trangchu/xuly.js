@@ -13,7 +13,24 @@ var room_name = "room";
       content = data;
       });
 
-
+    socket.on("groups_info",function(groupchats,user){
+      
+      for( let i = 0; i < groupchats.length; i++){
+        if(i%2==0){
+        $(".inbox_chat").append("<div class='chat_list'><div class='chat_people'><div class='chat_img'>" +"<img src='https://ptetutorials.com/images/user-profile.png' alt='sunil'>"+" </div><div class='chat_ib'>"+
+            "<h5>"+groupchats[i].group_name +" <span class='chat_date'>Dec 25</span>"+"</h5>"
+            +"<p>hhaha</p>"
+          +"</div></div></div>")
+        }
+        else{
+          $(".inbox_chat").append("<div class='chat_list active_chat'><div class='chat_people'><div class='chat_img'>" +"<img src='https://ptetutorials.com/images/user-profile.png' alt='sunil'>"+" </div><div class='chat_ib'>"+
+            "<h5>"+groupchats[i].group_name +" <span class='chat_date'>Dec 25</span>"+"</h5>"
+            +"<p>hhaha</p>"
+          +"</div></div></div>");
+        }
+        }
+      
+   });
   
     $(document).ready(function(){
         
