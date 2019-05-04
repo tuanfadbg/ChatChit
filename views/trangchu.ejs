@@ -132,12 +132,12 @@
             </div>
             <div class="inbox_chat">
               <!-- Loop print data sql -->
-              <% print.forEach(function(user){%>
-                  <div class="chat_list" id="<%=user.id%>"onclick="addid(<%=user.id%>)">
+              <% print.forEach(function(_user){%>
+                  <div class="chat_list" id="<%=_user.userID%>"onclick="addid(<%=_user.userID%>)">
                 <div class="chat_people">
                   <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                   <div class="chat_ib">
-                    <%=user.name%> 
+                    <%=_user.fullname%> 
                   </div>
                 </div>
               </div>
