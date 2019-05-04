@@ -61,3 +61,26 @@ var room_name = "room";
 
     });
  
+
+
+    var arr_id=[0];
+  var i;
+  var key = 0;
+  function addid(iduser){
+  for(i=0;i<arr_id.length;i++){
+    if(arr_id[i]===iduser){
+        key=i;
+         arr_id.splice(i,1);
+          document.getElementById(iduser).style.backgroundColor="white";
+    }
+  }
+  if(key===0){
+       arr_id.push(iduser);
+       document.getElementById(iduser).style.backgroundColor="lightblue";
+   
+  }
+  else key=0;
+  
+   console.log(key);
+    console.log(arr_id);
+  }
