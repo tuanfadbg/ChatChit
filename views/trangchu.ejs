@@ -5,10 +5,12 @@
 	<title>Document</title>
 	<link rel="stylesheet" href="/trangchu/trangchu.css">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
- 
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet"/>
-  <!-- <script type="text/javascript" src="jquery.min.js"></script> -->
-
+  <script src="/socket.io/socket.io.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet"/> 
+	<!-- <script type="text/javascript" src="jquery.min.js"></script> -->
+  <script src="/trangchu/xuly.js" , type="text/javascript"></script>
 </head>
 <body>
   <div class="container">
@@ -24,47 +26,18 @@
               <div class="stylish-input-group">
                 <input type="text" class="search-bar"  placeholder="Search" >
                 <span class="input-group-addon">
-                  <button type="button" id="Group"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                <button type="button" id="Group"> <i class="fa fa-search" aria-hidden="true"></i> </button>
                 </span> </div>
               </div>
             </div>
-            <div class="inbox_chat">
-              <div class="chat_list active_chat">
-                <div class="chat_people">
-                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                  <div class="chat_ib">
-                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                    <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="chat_list">
-                <div class="chat_people">
-                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                  <div class="chat_ib">
-                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                    <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="chat_list">
-                <div class="chat_people">
-                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                  <div class="chat_ib">
-                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                    <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="chat_list">
-                <div class="chat_people">
-                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                  <div class="chat_ib">
-                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                    <p>Test, which is a new approach to have all solutions 
+          </div>  
+          <div class="inbox_chat">
+            <!-- <div class="chat_list active_chat">
+              <div class="chat_people">
+                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                <div class="chat_ib">
+                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                  <p>Test, which is a new approach to have all solutions 
                     astrology under one roof.</p>
                   </div>
                 </div>
@@ -132,18 +105,23 @@
             </div>
             <div class="inbox_chat">
               <!-- Loop print data sql -->
+//<<<<<<< hh
               <% print.forEach(function(_user){%>
                   <div class="chat_list" id="<%=_user.userID%>"onclick="addid(<%=_user.userID%>)">
+//=======
+              <!-- <% print.forEach(function(user){%>
+                  <div class="chat_list" id="<%=user.id%>"onclick="addid(<%=user.id%>)">
+//>>>>>>> master
                 <div class="chat_people">
                   <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                   <div class="chat_ib">
                     <%=_user.fullname%> 
                   </div>
                 </div>
-              </div>
+              </div> -->
 
 
-         <%});%>
+         <!-- <%});%> -->
 
 
               <div class="chat_list active_chat">
