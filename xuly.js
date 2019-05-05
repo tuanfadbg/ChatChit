@@ -5,8 +5,10 @@ var room_name = "room";
 
     socket.on("Message_sent",function(data){
       var message = data;
-      $(".msg_history").append("<div class='outgoing_msg1'><div class='sent_msg1'>"+"<p>"+message+"</p> "+"    </div></div>");
-      
+      // $(".msg_history").append("<div class='outgoing_msg1'><div class='sent_msg1'>"+"<p>"+message+"</p> "+"    </div></div>");
+       var date= new Date();
+          var d1 =date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear() +" " +date.getHours()+":" +date.getMinutes();
+          $(".msg_history").append("<div class='outgoing_msg1'><div class='sent_msg1'>"+"<p>"+message+"</p> "+"<span class='time_date'>" + d1+"    </span> </div></div>");  
       
     });
 
@@ -37,10 +39,23 @@ var room_name = "room";
           $("#message").val("");
         
       });
-        
+
+       
 
 
     });
+
+
+    var input = document.getElementById("message");
+      input.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+              document.getElementById("btn_mes").click();
+            }
+          });
+
+
+
   var arr_id=[0];
   var i;
   var key = 0;
