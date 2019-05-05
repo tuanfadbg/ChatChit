@@ -1,77 +1,34 @@
-var express = require('express');
+var express = require("express");
 var app = express();
 var path = require('path');
 var mysql = require('mysql');
-var bodyParser = require('body-parser');
+app.use(express.static("./public"));
+app.set("view engine","ejs");
+app.set("views","./views");
+var server = require("http").Server(app);
+var io = require("socket.io")(server);
 var session = require('express-session');
+var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+server.listen(3000);
+var moment = require('moment');
+
 var con = mysql.createConnection({
 	host: "localhost",
 	user:"root",
 	password:"",
-	database: "login"
+	database: "chat_online"
 });
-// <<<<<<< Tung
-/*
-con.connect(function(err){
-	if(err) throw err;
-	console.log('connected');
-	var sql ="insert into user (userName,password) values ('tshady','overwatch')";
-	con.query(sql,function(err,result){
-		if(err) throw err;
-		console.log('1 record inserted');
-	});
-});
-*/
-// =======
 
-// >>>>>>> master
-app.use('/css',express.static('/home/tshady/CEProject/css'));
-app.use('/js',express.static('/home/tshady/CEProject/js'));
-
-app.get('/',function(req,res){
-// <<<<<<< Tung
-	res.sendFile(path.join('/home/tshady/CEProject/login.html'));
-});
-//Registration
-app.post('/registry',function(req,res){
-  var fullName=req.body.fullName;
-  var phoneNum=req.body.phoneNumber;
-  var userName=req.body.userName;
-  var password=req.body.password;
-
-  res.write('Registration successed!.\n');
-  res.write('You sent the fullName "' + req.body.fullName+'".\n');
-  res.write('You sent the phoneNumber"' + req.body.phoneNumber+'".\n');
-  res.write('You sent the userName "' + req.body.userName+'".\n');
-  res.write('You sent the password "' + req.body.password+'".\n');
-
-  con.connect(function(err) {
-  if (err) throw err;
-  var sql = "INSERT INTO user (fullName,phoneNum,userName,password) VALUES ('"+fullName+"','"+phoneNum+"','"+userName+"', '"+password+"')";
-  con.query(sql, function (err) {
-    if (err) throw err;
-    console.log("1 record inserted");
-     res.end();
-  });
-  });
-});
-//Login
 app.use(session({
 	secret: 'secret',
 	resave: true,
 	saveUninitialized: true
 }));
 
-// =======
-	if (session.login == true) {
-res.sendFile(path.join('/home/tshady/MyProject/login.html'));
-	} else {
-	res.sendFile(path.join('/home/tshady/CEProject/login.html'));
-}
-});
-//Registration
+app.use('/public',express.static(path.join(__dirname, './public')));
+
 app.post('/registry',function(req,res){
 
 	console.log(req.body);
@@ -99,21 +56,17 @@ app.post('/registry',function(req,res){
 	});
 });
 
-/*
-// >>>>>>> master
 app.post('/signin', function(request, response) {
 	var username = request.body.userName;
 	var password = request.body.password;
+
 	if (username && password) {
-		con.query('SELECT * FROM user WHERE userName = ? AND password = ?', [username, password], function(error, results, fields) {
+		con.query('SELECT * FROM user WHERE username = ? AND pass = ?', [username, password], function(error, results, fields) {
 			if (results.length > 0) {
 				request.session.loggedin = true;
 				request.session.username = username;
-// <<<<<<< Tung
-				response.write('Signed In!!!!!' + '\n welcome back ' + username);
-// =======
-				response.write('Signed In!!!!!' + '\n welcome back ' + username + results.length);
-// >>>>>>> master
+				request.session.user = results[0];
+				user = results[0];
 			} else {
 				response.send('Incorrect Username and/or Password!');
 			}			
@@ -124,23 +77,131 @@ app.post('/signin', function(request, response) {
 		response.end();
 	}
 });
-// <<<<<<< Tung
+
+var user;
+var groupChats;
+
+var obj = {};
+   
+  
+// app.get("/",function(req,res){
+//     //res.render("trangchu")
+//     res.render("login")
+// });
+
+app.get('/',function(request,response){
+	if (!request.session.loggedin) {
+	
+		response.sendFile(path.join(__dirname, './public/login/', 'login.html'));
+	} else {
+		if (request.session.user) {
+			user = request.session.user;
+			console.log(user);
+			var stringQuery = 'SELECT * FROM `member_group` JOIN group_info ' + 
+			'ON member_group.groupID = group_info.groupID WHERE userID =' + user.userID+ ' OR recceiver_id =' + user.userID;
+
+			con.query(stringQuery, function(error, result, fields) {
+			groupChats = result;
+	
+			// xu ly chat 2 nguoi
+			let userIdQuery = [] ;
+			
+			for (let i = 0; i< groupChats.length; i++) {
+				if (groupChats[i].group_name == null || groupChats[i].group_name == '') {
+
+				if(groupChats[i].userID == user.userID)
+
+				userIdQuery.push(groupChats[i].recceiver_id);
+				else {
+					userIdQuery.push(groupChats[i].userID);
+				}
+				}
+			}
+			
+			if (userIdQuery.length > 0) {
+				stringQuery = 'SELECT * FROM `user` where userID in ' + convertArrayToString(userIdQuery);	
+				con.query(stringQuery, function(error, results, fields) {
+		
+					for (let i = 0; i< groupChats.length; i++) {
+						if (groupChats[i].group_name == null || groupChats[i].group_name == '') {
+						if(groupChats[i].userID == user.userID) {
+							for (let j = 0;j< results.length; j++) {
+							if (groupChats[i].recceiver_id == results[j].userID) {
+								groupChats[i].group_name = results[j].fullname;
+							
+							}
+							}
+						}
+						}
+					}
+					obj = {groupChats: groupChats};
+					response.render("trangchu", obj);
+				});
+			} else {
+				obj = {groupChats: groupChats};
+				response.render("trangchu", obj);
+				}
+			});
+
+			io.on("connection",function(socket){
+    
+				console.log("Connected with socket id: "+ socket.id);
+				
+				socket.join(user.userID);
+				socket.emit("current_room", user.userID);
+			
+				socket.on("Client_send_message",function(messageObj){
+					console.log(messageObj);
+				
+					let stringQuery = "INSERT INTO `message` (`msgID`, `content`, `groupID`, `userID`, `type`, `time`) "
+					
+					+ "VALUES (NULL,'" + messageObj.message + "', '" + messageObj.currentRoom + "', '" + user.userID + "', '', '" + moment().format()+ "')";
+					console.log(stringQuery);
+					con.query(stringQuery, function(error, result, fields) {
+						
+					});
+					socket.to(messageObj.currentRoom).emit("Message_sent",messageObj);
+				});
+			
+				var room_name;
+				 
+				socket.on("Joinroom",function(data){
+					socket.join(data);
+					console.log("Joinroom");
+					console.log(data);
+					room_name = data;
+					
+					var groupID = (data + "").replace("group_", "");
+					var stringQuery = 'SELECT * FROM `message` where groupID = ' + groupID;
+	
+					con.query(stringQuery, function(error, result, fields) {
+						console.log(result);
+						socket.emit("message_info", result, user.userID);
+					});
+					
+				});
+				socket.emit("groups_info",groupChats,user);
+				 
+			 });
 
 
-// =======
-*/
-app.post('/signin',function(request,response){
-	var username=request.body.userName;
-	var password=request.body.password;
-	response.send(username +" "+password);
-	var sql = "SELECT userName,password FROM user WHERE userName='root' AND password='a'";
-	con.query(sql,function(err,result){
-		if(err) throw err;
-		if(username ==result[0].userName)
-		console.log(result[0].userName);
-		else
-		console.log("Wrong username");
-	});
+		} else{
+			response.sendFile(path.join(__dirname, './public/login/', 'login.html'));
+		}
+	}
 });
-// >>>>>>> master
-app.listen(3000);
+// app.listen(3000);
+
+
+function convertArrayToString(arr) {
+  
+	let result = "(";
+	for (let i = 0; i < arr.length; i++) {
+	  if (i == arr.length - 1)
+	  result += arr[i];
+	  else
+	  result += arr[i] + ",";
+	}
+	result += ")";
+  return result;
+  }

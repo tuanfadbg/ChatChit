@@ -18,9 +18,7 @@ img{ max-width:100%;}
 .srch_bar {
   display: inline-block;
   text-align: right;
-  width: 60%; 
-  
-
+  width: 60%; padding:
 }
 .headind_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1px solid #c4c4c4;}
 
@@ -101,22 +99,12 @@ img{ max-width:100%;}
   margin: 0; color:#fff;
   padding: 5px 10px 5px 12px;
   width:100%;
-  word-wrap: break-word;
 }
 .outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
 .sent_msg {
   float: right;
-  width: auto;
-  max-width: 46%;
+  width: 46%;
 }
-
-.outgoing_msg1{ overflow:hidden; margin:26px 0 26px;}
-.sent_msg1 {
-  float: left;
-  width: auto;
-  max-width: 46%;
-}
-
 .input_msg_write input {
   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
   border: medium none;
@@ -144,7 +132,4 @@ img{ max-width:100%;}
 .msg_history {
   height: 516px;
   overflow-y: auto;
-}
-.daxem{
-  float: right;
 }

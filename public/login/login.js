@@ -1,3 +1,62 @@
+$("#registry").click(function() {
+// $.post('/registry', {category: $('userNameR, type:'premium'}, function(response){ 
+//       alert("success");
+//       $("#mypar").html(response.amount);
+// });
+
+$("#formRegistry").submit(function(e) {
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+    var form = $(this);
+    var url = form.attr('action');
+
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: form.serialize(), // serializes the form's elements.
+           success: function(data)
+           {
+            if (data == "") {
+              window.location.replace("http://localhost:3000");
+              return;
+            }
+            $("#notification_regis").empty();tẻ
+            $("#notification_regis").append("<div class=\"alert alert-danger\"><strong>Danger!</strong> " + data + "</div>");
+             
+           }
+         });
+});
+});
+
+$("#loginbtn").click(function() {
+
+$("#formLogin").submit(function(e) {
+
+  e.preventDefault(); // avoid to execute the actual submit of the form.
+
+  var form = $(this);
+  var url = form.attr('action');
+
+  $.ajax({
+         type: "POST",
+         url: url,
+         data: form.serialize(), // serializes the form's elements.
+         success: function(data)
+         {
+          if (data == "") {
+            window.location.replace("http://localhost:3000");
+            return;
+          }
+          $("#notification_login").empty();
+          $("#notification_login").append("<div class=\"alert alert-danger\"><strong>Danger!</strong> " + data + "</div>");
+             
+         }
+       });
+});
+
+});
+
 $("#signup").click(function() {
 $("#first").fadeOut("fast", function() {
 $("#second").fadeIn("fast");
@@ -9,7 +68,9 @@ $("#second").fadeOut("fast", function() {
 $("#first").fadeIn("fast");
 });
 });
-/*
+
+
+
 
   
          $(function() {
@@ -40,7 +101,6 @@ $("#first").fadeIn("fast");
            });
          });
          
-
 
 $(function() {
   
@@ -73,4 +133,23 @@ $(function() {
     }
   });
 });
-*/
+
+// $(function(){
+//   $("form[name='login']").validate(
+//     rules:{
+//       password: {
+//         required : true,
+//         minlength: 5
+//       }
+//     },
+//     messages:{
+//       password:{
+//         required: "please Enter Your password",
+//         minlength: "Your password must be at least 5 characters long"
+//       }
+//     },
+//     submitHandler: function(form){
+//       form.submit();
+//     }
+//     );
+// });
