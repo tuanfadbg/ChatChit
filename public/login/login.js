@@ -1,61 +1,56 @@
-$("#registry").click(function() {
-// $.post('/registry', {category: $('userNameR, type:'premium'}, function(response){ 
-//       alert("success");
-//       $("#mypar").html(response.amount);
+// $("#registry").click(function() {
+//   $("#formRegistry").submit(function(e) {
+
+//       e.preventDefault(); // avoid to execute the actual submit of the form.
+
+//       var form = $(this);
+//       var url = form.attr('action');
+
+//       $.ajax({
+//             type: "POST",
+//             url: url,
+//             data: form.serialize(), // serializes the form's elements.
+//             success: function(data)
+//             {
+//               if (data == "") {
+//                 window.location.replace("http://localhost:3000");
+//                 return;
+//               }
+//               $("#notification_regis").empty();
+//               $("#notification_regis").append("<div class=\"alert alert-danger\"><strong>Danger!</strong> " + data + "</div>");
+              
+//             }
+//           });
+//   });
 // });
 
-$("#formRegistry").submit(function(e) {
+// $("#loginbtn").click(function() {
 
-    e.preventDefault(); // avoid to execute the actual submit of the form.
+//   $("#formLogin").submit(function(e) {
 
-    var form = $(this);
-    var url = form.attr('action');
+//     e.preventDefault(); // avoid to execute the actual submit of the form.
 
-    $.ajax({
-           type: "POST",
-           url: url,
-           data: form.serialize(), // serializes the form's elements.
-           success: function(data)
-           {
-            if (data == "") {
-              window.location.replace("http://localhost:3000");
-              return;
-            }
-            $("#notification_regis").empty();tẻ
-            $("#notification_regis").append("<div class=\"alert alert-danger\"><strong>Danger!</strong> " + data + "</div>");
-             
-           }
-         });
-});
-});
+//     var form = $(this);
+//     var url = form.attr('action');
 
-$("#loginbtn").click(function() {
+//     $.ajax({
+//           type: "POST",
+//           url: url,
+//           data: form.serialize(), // serializes the form's elements.
+//           success: function(data)
+//           {
+//             if (data == "") {
+//               window.location.replace("http://localhost:3000");
+//               return;
+//             }
+//             $("#notification_login").empty();
+//             $("#notification_login").append("<div class=\"alert alert-danger\"><strong>Danger!</strong> " + data + "</div>");
+              
+//           }
+//         });
+//   });
 
-$("#formLogin").submit(function(e) {
-
-  e.preventDefault(); // avoid to execute the actual submit of the form.
-
-  var form = $(this);
-  var url = form.attr('action');
-
-  $.ajax({
-         type: "POST",
-         url: url,
-         data: form.serialize(), // serializes the form's elements.
-         success: function(data)
-         {
-          if (data == "") {
-            window.location.replace("http://localhost:3000");
-            return;
-          }
-          $("#notification_login").empty();
-          $("#notification_login").append("<div class=\"alert alert-danger\"><strong>Danger!</strong> " + data + "</div>");
-             
-         }
-       });
-});
-
-});
+// });
 
 $("#signup").click(function() {
 $("#first").fadeOut("fast", function() {
@@ -96,23 +91,50 @@ $("#first").fadeIn("fast");
                
              },
              submitHandler: function(form) {
-               form.submit();
+              $("#formLogin").submit(function(e) {
+
+                e.preventDefault(); // avoid to execute the actual submit of the form.
+            
+                var form = $(this);
+                var url = form.attr('action');
+            
+                $.ajax({
+                      type: "POST",
+                      url: url,
+                      data: form.serialize(), // serializes the form's elements.
+                      success: function(data)
+                      {
+                        if (data == "") {
+                          window.location.replace("http://localhost:3000");
+                          return;
+                        }
+                        $("#notification_login").empty();
+                        $("#notification_login").append("<div class=\"alert alert-danger\"><strong>Danger!</strong> " + data + "</div>");
+                          
+                      }
+                    });
+              });
              }
            });
          });
          
 
+
 $(function() {
   
   $("form[name='registration']").validate({
     rules: {
-      firstname: "required",
-      lastname: "required",
+      fullName: "required",
+      userName: "required",
       email: {
         required: true,
         email: true
       },
       password: {
+        required: true,
+        minlength: 5
+      },
+      passwordCf: {
         required: true,
         minlength: 5
       }
@@ -129,27 +151,30 @@ $(function() {
     },
   
     submitHandler: function(form) {
-      form.submit();
+        // form.submit();
+        $("#formRegistry").submit(function(e) {
+
+          e.preventDefault(); // avoid to execute the actual submit of the form.
+    
+          var form = $(this);
+          var url = form.attr('action');
+    
+          $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                  if (data == "") {
+                    window.location.replace("http://localhost:3000");
+                    return;
+                  }
+                  $("#notification_regis").empty();
+                  $("#notification_regis").append("<div class=\"alert alert-danger\"><strong>Danger!</strong> " + data + "</div>");
+                  
+                }
+              });
+      });
     }
   });
 });
-
-// $(function(){
-//   $("form[name='login']").validate(
-//     rules:{
-//       password: {
-//         required : true,
-//         minlength: 5
-//       }
-//     },
-//     messages:{
-//       password:{
-//         required: "please Enter Your password",
-//         minlength: "Your password must be at least 5 characters long"
-//       }
-//     },
-//     submitHandler: function(form){
-//       form.submit();
-//     }
-//     );
-// });
