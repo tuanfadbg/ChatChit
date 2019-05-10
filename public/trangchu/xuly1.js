@@ -14,14 +14,14 @@ var myInfo;
 
     // nhan tin nhan
       socket.on("Message_sent",function(data){
-    
+        console.log(data);
         $(".msg_history").append('<div class="incoming_msg"><div class="incoming_msg_img">'
         +'<img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">' + 
         '</div><div class="received_msg"><div class="received_withd_msg"><p>' + data.message + '</p></div></div></div>');
       });
 
 
-      socket.on("groups_info",function(groupchats,user){
+      socket.on("groups_info",function(groupchats){
         $(".inbox_chat").empty();
         for( let i = 0; i < groupchats.length; i++){
           if (i == 0) {
@@ -32,7 +32,7 @@ var myInfo;
           + '<div class="chat_people"><div class="chat_img"><img src="https://ptetutorials.com/images/user-profile.png"></div>'
           + '<div class="chat_ib">'
               +' <h5>'+groupchats[i].group_name+'</h5>'
-              +'<p>hhaha</p>'
+              +'<p id="message_' + groupID + '>'+(groupchats[i].last_message_string == null ? "" : groupchats[i].last_message_string)+'</p>'
             +'</div></div></div>');
         }
       });
@@ -42,6 +42,13 @@ var myInfo;
         $(".msg_history").empty();
         for( let i = 0; i < messageList.length; i++){
           let data = messageList[i];
+          
+
+          var date= new Date(data.time);
+          var dateInString =date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear() +" " +date.getHours()+":" +date.getMinutes();
+        
+
+
           if (data.userID != senderId) {
         
             $(".msg_history").append('<div class="incoming_msg"><div class="incoming_msg_img">'
@@ -49,11 +56,17 @@ var myInfo;
             '</div><div class="received_msg"><div class="received_withd_msg"><p>' + data.content + '</p></div></div></div>');
           } else {
             $(".msg_history").append('<div class="outgoing_msg">'
-            + '<div class="sent_msg"><p>' + data.content + '</p> <span class="time_date"> ' + data.time + '</span> </div></div></div>');
+            + '<div class="sent_msg"><p>' + data.content + '</p> <span class="time_date"> ' + dateInString + '</span> </div></div></div>');
     
           }
         }
         $(".msg_history").scrollTop($('.msg_history').height() + 1500);
+      });
+
+      socket.on("new_message",function(data){
+        // $('"#message_' + data.currentRoom + '"').empty();
+        // $('"#message_' + data.currentRoom + '"').append(data.message);
+        
       });
 
 
@@ -93,7 +106,7 @@ var myInfo;
           + '<div class="chat_people"><div class="chat_img"><img src="https://ptetutorials.com/images/user-profile.png"></div>'
           + '<div class="chat_ib">'
               +' <h5>'+friends[i].fullname+'</h5>'
-              +'<p>hhaha</p>'
+              +'<p>@'+friends[i].username+'</p>'
             +'</div></div></div>');
         }
       });

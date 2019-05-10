@@ -97,7 +97,8 @@ $("#first").fadeIn("fast");
             
                 var form = $(this);
                 var url = form.attr('action');
-            
+                
+                console.log(url);
                 $.ajax({
                       type: "POST",
                       url: url,
