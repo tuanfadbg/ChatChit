@@ -90,18 +90,19 @@ var groupChats;
 var obj = {};
 
 app.get('/',function(request,response){
-	if (!request.session.loggedin) {
+	// if (!request.session.loggedin) {
 	
-		response.sendFile(path.join(__dirname, './public/login/', 'login.html'));
-	} else {
-		if (request.session.user) {
-			user = request.session.user;
-			console.log(user);
-			response.render("trangchu", obj);
-		} else{
-			response.sendFile(path.join(__dirname, './public/login/', 'login.html'));
-		}
-	}
+	// 	response.sendFile(path.join(__dirname, './public/login/', 'login.html'));
+	// } else {
+	// 	if (request.session.user) {
+	// 		user = request.session.user;
+	// 		console.log(user);
+			// response.render("homepage", obj);
+			response.render("login", obj);
+	// 	} else{
+	// 		response.sendFile(path.join(__dirname, './public/login/', 'login.html'));
+	// 	}
+	// }
 });
 
 io.on("connection",function(socket){
