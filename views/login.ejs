@@ -86,7 +86,7 @@ $("#login").click(function() {
             success: function(data)
             {
               if (data == "success") {
-                window.location.replace("http://localhost:3000");
+                window.location.replace(window.location.href);
                 return;
               }
             }

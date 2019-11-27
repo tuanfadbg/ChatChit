@@ -190,7 +190,7 @@ body {
 }
 #frame #sidepanel #profile .wrap #status-options ul li {
   padding: 15px 0 30px 0px;
-  display: table-header-group;
+  /* display: table-header-group; */
   cursor: pointer;
 }
 @media screen and (max-width: 735px) {
@@ -206,7 +206,7 @@ body {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  margin: 5px 0 0 0;
+  margin: 15px 0 0 8px;
 }
 @media screen and (max-width: 735px) {
   #frame #sidepanel #profile .wrap #status-options ul li span.status-circle {
@@ -232,6 +232,7 @@ body {
 }
 #frame #sidepanel #profile .wrap #status-options ul li p {
   padding-left: 16px;
+  padding-top: 10px;
 }
 @media screen and (max-width: 735px) {
   #frame #sidepanel #profile .wrap #status-options ul li p {
@@ -615,8 +616,8 @@ body {
   font-family: "proxima-nova",  "Source Sans Pro", sans-serif;
   float: left;
   border: none;
-  width: calc(100% - 90px);
-  padding: 11px 32px 10px 8px;
+  width: calc(100% - 50px);
+  padding: 11px 32px 14px 8px;
   font-size: 0.8em;
   color: #32465a;
 }
@@ -666,4 +667,8 @@ body {
 }
 #frame .content .message-input .wrap button:focus {
   outline: none;
+}
+
+#link {
+  padding-left: 10px;
 }

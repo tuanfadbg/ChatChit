@@ -15,6 +15,13 @@ server.listen(3000);
 var moment = require('moment');
 var clients = {};
 
+// local database
+const low = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync')
+const adapter = new FileSync('db.json')
+const db = low(adapter)
+
+
 app.use(session({
 	secret: 'secret',
 	resave: true,
@@ -29,15 +36,25 @@ app.post('/login', function(request, response) {
 	
 	request.session.room = room;
 	request.session.name = name;
-
+	db.update('count_user', n => n + 1)
+	.write();
 	response.send('success');
 	response.end();
 });
+
+app.post('/logout', function(request, response) {
+	request.session.destroy();
+	response.send('success');
+	response.end();
+});
+
 
 var user;
 var obj = {};
 var dataRoom = [];
 app.get('/',function(request, response){
+	db.defaults({ count_message: 0, count_user:0})
+  	.write()
 	console.log(request.session);
 	if (request.session.room != null && request.session.name != null) {
 		user = {name: request.session.name, room: request.session.room};
@@ -77,71 +94,63 @@ io.on("connection",function(socket){
 				break;
 			}
 		}
-			dataRoom[socket.user.room].push(socket.user);
+		dataRoom[socket.user.room].push(socket.user);
 	}
 
 	io.in(socket.user.room).emit("NewMember", socket.user);
 	io.in(socket.user.room).emit("Member", dataRoom[socket.user.room]);
 
 	socket.on("NewMessage", function(newMessage) {
+		db.update('count_message', n => n + 1)
+		  .write();
+		  
 		socket.to(socket.user.room).emit('NewMessage', {message: newMessage.message});
 	});
-	// socket.on("Client_send_message",function(messageObj){
 
-	// 	socket.to(messageObj.currentRoom).emit("Message_sent",messageObj);
-	// 	console.log("messsage to " + messageObj.currentRoom + ", content " + messageObj);
-	// });
-	
+	socket.on("UpdateStatus", function(newMessage) {
+		for (let i = 0; i < dataRoom[socket.user.room].length; i++) {
+			if (dataRoom[socket.user.room][i].name == socket.user.name) {
+				dataRoom[socket.user.room][i].status = newMessage.message;
+				break;
+			}
+		}
+		io.in(socket.user.room).emit("Member", dataRoom[socket.user.room]);
+	});
 
-	// socket.on("list_friend",function(data){
-	// 	var stringQuery = 'SELECT * FROM `user` where userId != ' + socket.userID;
-
-	// 	con.query(stringQuery, function(error, result, fields) {
-	// 		socket.emit("list_friend", result);
-	// 	});
-		
-	// });
+	socket.on("Logout", function(newMessage) {
+		logout();
+		console.log("Logout");
+	});
 
 	socket.on('disconnect', () => {
+		logout();
 		socket.removeAllListeners();
 	 });
 
+	 function logout() {
+		for (let i = 0; i < dataRoom[socket.user.room].length; i++) {
+			if (dataRoom[socket.user.room][i].name == socket.user.name) {
+				dataRoom[socket.user.room].splice(i, 1);
+				break;
+			}
+		}
+		socket.to(socket.user.room).emit('Member', dataRoom[socket.user.room]);
+	 }
  });
 
-function queryLastMessageAndEmitData(socket, idLastMessage, groupChats) {
-	if (idLastMessage.length > 0) {
-		let queryLastMessage = 'SELECT * FROM `message` where msgID in ' + convertArrayToString(idLastMessage);	
-		// console.log(queryLastMessage);
+// // Set some defaults (required if your JSON file is empty)
+// db.defaults({ posts: [], user: {}, count: 0 })
+//   .write()
 
-		con.query(queryLastMessage, function(error, results, fields) {
-			// console.log(results);
-			for (let i = 0; i < groupChats.length; i++) {
-				if (groupChats[i].last_message_string == null)
-				console.log(groupChats[i]);
-					for (let j = 0; j < results.length; j++) {
-						if (results[j].msgID == groupChats[i].last_message) {
-							groupChats[i].last_message_string = results[j].content;
-							break;
-						}
-					}
-			}
-			console.log(groupChats);
-			socket.emit("groups_info", groupChats);
-		});
-	} else {
-		socket.emit("groups_info", groupChats);
-	}
-}
+// // Add a post
+// db.get('posts')
+//   .push({ id: 1, title: 'lowdb is awesome'})
+//   .write()
 
-function convertArrayToString(arr) {
+// // Set a user using Lodash shorthand syntax
+// db.set('user.name', 'typicode')
+//   .write()
   
-	let result = "(";
-	for (let i = 0; i < arr.length; i++) {
-	  if (i == arr.length - 1)
-	  result += arr[i];
-	  else
-	  result += arr[i] + ",";
-	}
-	result += ")";
-  return result;
-  }
+// // Increment count
+// db.update('count', n => n + 1)
+//   .write()
