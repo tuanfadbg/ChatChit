@@ -1,21 +1,17 @@
 
-<link href="/bootstrap/bootstrap.css" rel="stylesheet" id="bootstrap-css">
-<script src="/bootstrap/bootstrap.js"></script>
-<script src="/bootstrap/pooper.js"></script>
-<script src="/jquery.min.js"></script>
-<script src="/socketio.js"></script> 
-<!------ Include the above in your HEAD tag ---------->
-
-
 <!DOCTYPE html><html class=''>
 <head>
-<!-- <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'> -->
-
-<link href='/reset.css' rel='stylesheet' type='text/css' />
-<link href='/fontawesome/css/font-awesome.css' rel='stylesheet' type='text/css'/>
-<link href='/stylesheets/style.css' rel='stylesheet' type='text/css'/>
-
-</head><body>
+	<link href="/bootstrap/bootstrap.css" rel="stylesheet" id="bootstrap-css">
+	<script src="/bootstrap/bootstrap.js"></script>
+	<script src="/bootstrap/pooper.js"></script>
+	<script src="/jquery.min.js"></script>
+	<script src="/socketio.js"></script> 
+	<link href='/reset.css' rel='stylesheet' type='text/css' />
+	<link href='/fontawesome/css/font-awesome.css' rel='stylesheet' type='text/css'/>
+	<link href='/stylesheets/style.css' rel='stylesheet' type='text/css'/>
+	<title>Webchat Incognito</title>
+</head>
+<body>
 <div id="frame">
 	<div id="sidepanel">
 		<div id="profile">
@@ -37,23 +33,17 @@
 			</div>
 		</div>
 		<div id="search">
-			<label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-			<input type="text" placeholder="Search contacts..." />
+		
 		</div>
 		<div id="contacts">
 			<ul id="contacts_list">
 				
 			</ul>
 		</div>
-		<!-- <div id="bottom-bar">
-			<button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
-			<button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
-		</div> -->
+
 	</div>
 	<div class="content">
 		<div class="contact-profile">
-			<!-- <img src="https://scontent.fhan2-3.fna.fbcdn.net/v/t1.0-1/p960x960/72183734_415688515781287_2590208924116320256_o.jpg?_nc_cat=107&_nc_oc=AQmFBAiqX6NZbuOgPPgsUWDa3mio_TQ28UiU96yfl5ryMuo0X2FhfvnuoPZKK6tsNdo&_nc_ht=scontent.fhan2-3.fna&oh=2f0a56adf97cc1076f2be4ebc99d634b&oe=5E4B5726" alt="" />
-			<p> <textarea id="link" style="height: 60px; width: fit-content; background: none; color: #fff; border: none;"></textarea> <button onClick="copyLink();"><i class="fa fa-clipboard"></i></button></p> -->
 			<p id="link"> </p>
 		</div>
 		<div class="messages">
@@ -103,7 +93,8 @@ $("#status-options ul li").click(function() {
 	
 	$("#status-options").removeClass("active");
 });
-//# sourceURL=pen.js
+
 </script>
 <script src="/main.js" , type="text/javascript"></script>
-</body></html>
+</body>
+</html>
