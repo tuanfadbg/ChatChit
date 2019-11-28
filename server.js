@@ -36,6 +36,7 @@ app.post('/login', function(request, response) {
 	
 	request.session.room = room;
 	request.session.name = name;
+	request.session.img = "img" + getRandomInt(7);
 	db.update('count_user', n => n + 1)
 	.write();
 	response.send('success');
@@ -57,7 +58,7 @@ app.get('/',function(request, response){
   	.write()
 	console.log(request.session);
 	if (request.session.room != null && request.session.name != null) {
-		user = {name: request.session.name, room: request.session.room};
+		user = {name: request.session.name, room: request.session.room, img: request.session.img };
 		response.render("homepage", obj);
 	} else {
 		response.render("login", obj);
@@ -67,7 +68,7 @@ app.get('/',function(request, response){
 app.get('/r/:room',function(request, response){
 	var room = request.params.room;
 	if (request.session.room != null && request.session.name != null) {
-		user = {name: request.session.name, room: room};
+		user = {name: request.session.name, room: room, img: request.session.img};
 		response.render("homepage", obj);
 	} else {
 		response.render("login", obj);
@@ -79,13 +80,14 @@ var user;
 io.on("connection",function(socket){
 	if (user == null)
 		return;
-	socket.user = user;
+	socket.user = user; 
 	console.log("Connected with socket user: ")
 	console.log(socket.user);
 
 	socket.join(socket.user.room);
 
-	if (dataRoom[socket.user.room] == null) {
+	if (dataRoom[socket.user.room] == null || dataRoom[socket.user.room].length == 0) {
+
 		dataRoom[socket.user.room] = [socket.user];
 	} else {
 		for (let i = 0; i < dataRoom[socket.user.room].length; i++) {
@@ -98,13 +100,16 @@ io.on("connection",function(socket){
 	}
 
 	io.in(socket.user.room).emit("NewMember", socket.user);
+
 	io.in(socket.user.room).emit("Member", dataRoom[socket.user.room]);
 
 	socket.on("NewMessage", function(newMessage) {
 		db.update('count_message', n => n + 1)
 		  .write();
 		  
-		socket.to(socket.user.room).emit('NewMessage', {message: newMessage.message});
+		var dataNewMessage = socket.user;
+		dataNewMessage.message = newMessage.message;
+		socket.to(socket.user.room).emit('NewMessage', {dataNewMessage});
 	});
 
 	socket.on("UpdateStatus", function(newMessage) {
@@ -137,6 +142,10 @@ io.on("connection",function(socket){
 		socket.to(socket.user.room).emit('Member', dataRoom[socket.user.room]);
 	 }
  });
+
+ function getRandomInt(max) {
+	return Math.floor(Math.random() * Math.floor(max));
+  }
 
 // // Set some defaults (required if your JSON file is empty)
 // db.defaults({ posts: [], user: {}, count: 0 })
